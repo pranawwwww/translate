@@ -10,6 +10,7 @@ Handles:
 import os
 import ast
 import json
+import time
 from typing import List, Dict, Any, Union
 from dotenv import load_dotenv
 from models.base import ModelInterface
@@ -64,7 +65,35 @@ class ClaudeHaikuInterface(ModelInterface):
         )
 
         # Claude returns structured content (list of message blocks)
-        return response.content[0].text if response.content else ""
+        result = response.content[0].text if response.content else ""
+        time.sleep(19)  # Rate limit: 5 requests/minute = 12 seconds between requests
+        return result
+
+    def infer_batch(self, functions_list: List[List[Dict[str, Any]]],
+                    user_queries: List[str],
+                    prompt_passing_in_english: bool = True) -> List[str]:
+        """
+        Override batch inference to respect Anthropic's 5 requests/minute rate limit.
+        
+        Makes sequential requests instead of concurrent to avoid hitting rate limits.
+        """
+        if len(functions_list) != len(user_queries):
+            raise ValueError("functions_list and user_queries must have same length")
+
+        results = []
+        for i, (functions, user_query) in enumerate(zip(functions_list, user_queries)):
+            try:
+                response = self.infer(
+                    functions=functions,
+                    user_query=user_query,
+                    prompt_passing_in_english=prompt_passing_in_english
+                )
+                results.append(response)
+            except Exception as e:
+                print(f"Error calling model for batch item {i}: {e}")
+                results.append(f"Error: {str(e)}")
+        
+        return results
 
     def parse_output(self, raw_output: str) -> Union[List[Dict[str, Any]], str]:
         """

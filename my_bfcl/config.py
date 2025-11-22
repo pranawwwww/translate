@@ -140,19 +140,15 @@ configs: list[Config] = [
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME), add_noise_mode=AddNoiseMode.SYNONYM),
     
 
-
     # Config(model=LocalModel.QWEN_2_5_7B_INSTRUCT, translate_mode=Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED), add_noise_mode=AddNoiseMode.NO_NOISE),
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
-# for model in [LocalModel.QWEN_2_5_7B_INSTRUCT, LocalModel.QWEN_2_5_14B_INSTRUCT]:
-for model in [ApiModel.GPT_4O_MINI]:
+
+# HINDI BENCHMARK - 3 models x 2 translate modes x 3 noise types = 18 configs
+for model in [ApiModel.CLAUDE_HAIKU]:
     for translate_mode in [
-        NotTranslated(),
-        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
-        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE),
-        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT),
-        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME),
-        Translated(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),
+        Translated(language=Language.HINDI, option=TranslateOption.PARTIALLY_TRANSLATED),
     ]:
         for add_noise_mode in [
             AddNoiseMode.NO_NOISE,

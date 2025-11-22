@@ -22,8 +22,8 @@ class TranslateConfig:
 # language_to_translate: list[Language] = [Language.CHINESE]
 
 translate_configs: list[TranslateConfig] = [
-    TranslateConfig(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
-    TranslateConfig(language=Language.CHINESE, option=TranslateOption.PARTIALLY_TRANSLATED),
+    # TranslateConfig(language=Language.CHINESE, option=TranslateOption.FULLY_TRANSLATED),
+    # TranslateConfig(language=Language.CHINESE, option=TranslateOption.PARTIALLY_TRANSLATED),
     TranslateConfig(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),
     TranslateConfig(language=Language.HINDI, option=TranslateOption.PARTIALLY_TRANSLATED),
 ]
