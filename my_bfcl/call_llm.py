@@ -248,6 +248,16 @@ def make_chat_pipeline(model: LocalModel):
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
     import torch
+    from huggingface_hub import login
+    
+    # Load environment variables
+    load_dotenv(dotenv_path=".env")
+    hf_token = os.getenv("HF_TOKEN")
+    
+    # Authenticate with HuggingFace
+    if hf_token:
+        login(token=hf_token, write_permission=False)
+        print("Logged in to HuggingFace Hub")
     
     # Apply xet patch right before loading model
     try:
@@ -270,7 +280,7 @@ def make_chat_pipeline(model: LocalModel):
     os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
 
     # --- Load tokenizer ---
-    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True, token=hf_token)
 
     # Set pad token for batch processing
     if tokenizer.pad_token is None:
@@ -285,6 +295,7 @@ def make_chat_pipeline(model: LocalModel):
         device_map="cuda:0",  # Keep model on GPU, avoid unnecessary offloading
         dtype=torch.bfloat16,
         trust_remote_code=True,
+        token=hf_token,
         # offload_folder="/scratch/tknolast/bfcl_temp/hf_offload",  # Removed for better performance
     )
 

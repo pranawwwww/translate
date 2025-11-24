@@ -101,42 +101,24 @@ class Llama31LocalInterface(ModelInterface):
         results = self.generator.send(templates)
         return results
 
-    def parse_output(self, raw_output: str) -> Dict[str, Any]:
+    def parse_output(self, raw_output: str) -> str:
         """
-        Parse Llama 3.1 model output to extract function calls.
+        Parse Llama 3.1 model output to extract function calls in JSON format.
 
-        Llama format: <|python_tag|>[{...}]</|python_tag|> or similar tool markers
+        Llama may output:
+        - Valid JSON: [{"name": "func", "arguments": {...}}]
+        - Single quotes: [{'name': 'func', 'arguments': {...}}]
+        - Mixed quotes or trailing commas
 
         Args:
             raw_output: Raw model output string
 
         Returns:
-            Parsed output as dict with 'function' key
+            Raw output as-is (will be handled by raw_to_json in parse_ast.py)
         """
-        try:
-            # Try to extract JSON from <|python_tag|> markers (Llama tool format)
-            if "<|python_tag|>" in raw_output:
-                start = raw_output.find("[")
-                end = raw_output.rfind("]") + 1
-                if start != -1 and end > start:
-                    json_str = raw_output[start:end]
-                    parsed = json.loads(json_str)
-                    return {"function": parsed}
-
-            # Try generic JSON extraction
-            start = raw_output.find("[")
-            end = raw_output.rfind("]") + 1
-            if start != -1 and end > start:
-                json_str = raw_output[start:end]
-                parsed = json.loads(json_str)
-                return {"function": parsed}
-
-            # Fallback: return raw output
-            return {"function": raw_output}
-
-        except (json.JSONDecodeError, ValueError) as e:
-            print(f"Warning: Could not parse Llama output: {e}")
-            return {"function": raw_output}
+        # Return raw output as string for parse_ast.py to handle
+        # This allows parse_ast.raw_to_json() to apply JSON cleanup logic
+        return raw_output.strip()
 
     def _generate_system_prompt(self, functions: List[Dict[str, Any]],
                                 prompt_passing_in_english: bool = True) -> str:

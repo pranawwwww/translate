@@ -147,10 +147,9 @@ configs: list[Config] = [
 ]
 
 # HINDI BENCHMARK - Local GPU models
-# Llama 3.1 8B and 70B on GPU with Hindi fully translated and partially translated
+# Qwen 2.5 14B on GPU with Hindi fully translated and partially translated
 for model in [
-    LocalModel.LLAMA_3_1_8B_INSTRUCT,
-    LocalModel.LLAMA_3_1_70B_INSTRUCT,
+    LocalModel.QWEN_2_5_14B_INSTRUCT,
 ]:
     for translate_mode in [
         Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),

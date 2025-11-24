@@ -128,17 +128,30 @@ def resolve_ast_call(elem):
     
 def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
     # print(f"model being decoded: {model}")
-    if model == LocalModel.GRANITE_3_1_8B_INSTRUCT:
-        # print("Decoding granite model output...")
+    if model == LocalModel.GRANITE_3_1_8B_INSTRUCT or model == LocalModel.LLAMA_3_1_8B_INSTRUCT or model == LocalModel.LLAMA_3_1_70B_INSTRUCT:
+        # print("Decoding granite/llama model output...")
         import json
-        # Parse Granite model's output format: <tool_call>[{...}]
+        import re
+        # Parse Granite/Llama model's output format: <tool_call>[{...}] or similar
         model_result_raw = model_result_raw.strip()
 
-        # Remove <tool_call> wrapper if present
+        # Remove <tool_call> wrapper if present (Granite format)
         if model_result_raw.startswith("<tool_call>"):
             model_result_raw = model_result_raw[len("<tool_call>"):]
 
+        # Remove <|python_tag|> wrapper if present (Llama format)
+        if "<|python_tag|>" in model_result_raw:
+            start = model_result_raw.find("[")
+            end = model_result_raw.rfind("]") + 1
+            if start != -1 and end > start:
+                model_result_raw = model_result_raw[start:end]
+
         model_result_raw = model_result_raw.strip("`\n ")
+
+        # Fix single quotes to double quotes (common Llama issue)
+        # Be careful: only replace single quotes that are used for JSON key/value quotes, not content
+        # Simple approach: replace ' with " in the JSON structure
+        model_result_raw = re.sub(r"(?<![\\])'", '"', model_result_raw)
 
         # Add brackets if missing
         if not model_result_raw.startswith("["):
@@ -149,10 +162,26 @@ def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
         try:
             # Parse the JSON array
             tool_calls = json.loads(model_result_raw)
-        except json.JSONDecodeError:
-            return f"Failed to decode JSON: Invalid JSON format."
+        except json.JSONDecodeError as e:
+            # If still failing, try to extract array content and rebuild
+            try:
+                # Extract content between [ and ]
+                start = model_result_raw.find("[")
+                end = model_result_raw.rfind("]") + 1
+                if start != -1 and end > start:
+                    content = model_result_raw[start+1:end-1].strip()
+                    if content:
+                        # Wrap each dict individually and try to parse
+                        model_result_raw = "[" + content + "]"
+                        tool_calls = json.loads(model_result_raw)
+                    else:
+                        return f"Failed to decode JSON: Empty array."
+                else:
+                    return f"Failed to decode JSON: Invalid JSON format - {str(e)}"
+            except json.JSONDecodeError as e2:
+                return f"Failed to decode JSON: Invalid JSON format - {str(e2)}"
 
-        # Convert Granite format to desired format
+        # Convert Granite/Llama format to desired format
         extracted = []
         if isinstance(tool_calls, list):
             for tool_call in tool_calls:
@@ -161,7 +190,7 @@ def raw_to_json(model: Model, case_id: str, model_result_raw: str) -> object:
                     func_args = tool_call["arguments"]
                     extracted.append({func_name: func_args})
                 else:
-                    return f"Failed to decode JSON: Invalid tool call structure."
+                    return f"Failed to decode JSON: Invalid tool call structure - missing 'name' or 'arguments' keys."
         else:
             return f"Failed to decode JSON: Expected a list of tool calls."
 

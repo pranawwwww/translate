@@ -364,8 +364,8 @@ for config in configs:
         for inference_raw in samples_to_process:
             id = inference_raw['id']
             # convert raw result to json format
-            # decoded_output = raw_to_json(config.model, id, inference_raw['result'])
-            decoded_output = model_interface.parse_output(inference_raw['result'])
+            raw_output = model_interface.parse_output(inference_raw['result'])
+            decoded_output = raw_to_json(config.model, id, raw_output)
             inference_json_entry = {
                 "id": id,
                 "result": decoded_output
