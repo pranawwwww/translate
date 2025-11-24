@@ -20,8 +20,10 @@ os.environ['HF_DATASETS_CACHE'] = str(cache_dir)
 os.environ['TORCH_HOME'] = str(cache_dir / "torch")
 os.environ['HUGGINGFACE_HUB_CACHE'] = str(cache_dir)
 
-# Disable symlinks which can cause permission issues
+# Disable symlinks and xet downloader which can cause permission issues
 os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
+os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '0'  # Disable xet downloader
+os.environ['HUGGINGFACE_HUB_CACHE'] = str(cache_dir)  # Use standard HTTP downloads
 
 print(f"HuggingFace cache directory: {cache_dir}")
 print(f"Cache directory exists: {cache_dir.exists()}")
