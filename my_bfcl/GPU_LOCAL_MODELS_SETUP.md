@@ -29,8 +29,8 @@ conda activate bfcl-gpu
 
 ### 3. Install GPU Dependencies
 ```bash
-# PyTorch with CUDA support (adjust CUDA version as needed)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+# PyTorch with CUDA 13.0 support (YOUR SETUP)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu130
 
 # HuggingFace transformers and required packages
 pip install transformers accelerate bitsandbytes
@@ -42,6 +42,12 @@ pip install ibm-granite
 # Verify GPU support
 python -c "import torch; print('GPU Available:', torch.cuda.is_available()); print('Device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
 ```
+
+### Your GPU Setup
+- **CUDA Version:** 13.0 ✓
+- **GPUs:** 2x NVIDIA A100-SXM4-80GB ✓
+- **Total Memory:** 160GB ✓
+- **Status:** Ready for inference ✓
 
 ---
 
