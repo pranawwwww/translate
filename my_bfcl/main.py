@@ -174,6 +174,10 @@ for config in configs:
             match local_model:
                 case LocalModel.GRANITE_3_1_8B_INSTRUCT:
                     model_postfix = "_granite"
+                case LocalModel.LLAMA_3_1_8B_INSTRUCT:
+                    model_postfix = "_llama3_1_8b"
+                case LocalModel.LLAMA_3_1_70B_INSTRUCT:
+                    model_postfix = "_llama3_1_70b"
                 case LocalModel.QWEN_2_5_7B_INSTRUCT:
                     model_postfix = "_qwen2_5_7b"
                 case LocalModel.QWEN_2_5_14B_INSTRUCT:

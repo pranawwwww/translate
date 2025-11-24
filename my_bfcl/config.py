@@ -13,6 +13,8 @@ class ApiModel(Enum):
 
 class LocalModel(Enum):
     GRANITE_3_1_8B_INSTRUCT = "ibm-granite/granite-3.1-8b-instruct"
+    LLAMA_3_1_8B_INSTRUCT = "meta-llama/Llama-3.1-8B-Instruct"
+    LLAMA_3_1_70B_INSTRUCT = "meta-llama/Llama-3.1-70B-Instruct"
     QWEN_2_5_7B_INSTRUCT = "Qwen/Qwen2.5-7B-Instruct"
     QWEN_2_5_14B_INSTRUCT = "Qwen/Qwen2.5-14B-Instruct"
     QWEN_2_5_32B_INSTRUCT = "Qwen/Qwen2.5-32B-Instruct"
@@ -145,9 +147,10 @@ configs: list[Config] = [
 ]
 
 # HINDI BENCHMARK - Local GPU models
-# Granite, Llama 3.1.8B, Qwen 2.5.7B, Qwen 2.5.14B on GPU with Hindi fully translated
+# Llama 3.1 8B and 70B on GPU with Hindi fully translated and partially translated
 for model in [
-    LocalModel.QWEN_2_5_14B_INSTRUCT,
+    LocalModel.LLAMA_3_1_8B_INSTRUCT,
+    LocalModel.LLAMA_3_1_70B_INSTRUCT,
 ]:
     for translate_mode in [
         Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),

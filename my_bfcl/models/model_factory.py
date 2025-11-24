@@ -12,6 +12,7 @@ from models.claude_sonnet_interface import ClaudeSonnetInterface
 from models.claude_haiku_interface import ClaudeHaikuInterface
 from models.deepseek_chat_interface import DeepseekChatInterface
 from models.llama_3_1_interface import Llama31Interface
+from models.llama_3_1_local_interface import Llama31LocalInterface
 from models.granite_3_1_8b_instruct_interface import Granite3_1_8BInstructInterface
 from models.qwen2_5_interface import Qwen25InstructInterface
 
@@ -89,6 +90,10 @@ def _create_local_model_interface(model: LocalModel, generator) -> ModelInterfac
     match model:
         case LocalModel.GRANITE_3_1_8B_INSTRUCT:
             return Granite3_1_8BInstructInterface(generator)
+        case LocalModel.LLAMA_3_1_8B_INSTRUCT:
+            return Llama31LocalInterface(generator, model_id="meta-llama/Llama-3.1-8B-Instruct")
+        case LocalModel.LLAMA_3_1_70B_INSTRUCT:
+            return Llama31LocalInterface(generator, model_id="meta-llama/Llama-3.1-70B-Instruct")
         case LocalModel.QWEN_2_5_7B_INSTRUCT:
             return Qwen25InstructInterface(generator, model_id="Qwen/Qwen2.5-7B-Instruct")
         case LocalModel.QWEN_2_5_14B_INSTRUCT:
