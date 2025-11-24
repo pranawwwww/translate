@@ -265,6 +265,22 @@ def make_chat_pipeline(model: LocalModel):
     # Set padding side to left for decoder-only models (prevents generation issues in batch mode)
     tokenizer.padding_side = "left"
 
+    # --- Patch huggingface_hub to force standard HTTP downloads (skip xet) ---
+    try:
+        import huggingface_hub.file_download as hf_file_download
+        # Override the xet_get function to use standard HTTP download instead
+        original_xet_get = hf_file_download.xet_get
+        
+        def no_xet_get(*args, **kwargs):
+            """Skip xet and use standard HTTP download"""
+            # Call http_get instead of xet_get
+            return hf_file_download.http_get(*args, **kwargs)
+        
+        hf_file_download.xet_get = no_xet_get
+        print("✓ Patched huggingface_hub to skip xet downloader")
+    except Exception as e:
+        print(f"Warning: Could not patch xet downloader: {e}")
+
     # --- Load model ---
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_id,
