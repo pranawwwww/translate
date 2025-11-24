@@ -1,28 +1,4 @@
 
-# Patch huggingface_hub to force standard HTTP downloads (skip xet) BEFORE any imports that trigger downloads
-import os as _os
-try:
-    import huggingface_hub.file_download as _hf_file_download
-    
-    _original_download = _hf_file_download._download_to_tmp_and_move
-    
-    def _patched_download_to_tmp_and_move(tmp_file, destination_path, headers=None, expected_size=None, resume_size=0, url=None, max_retries=5, user_agent=None, timeout=10, **kwargs):
-        """Patched version that skips xet and uses http_get directly"""
-        # Call http_get directly instead of trying xet_get
-        return _hf_file_download.http_get(
-            url=url,
-            temp_file=tmp_file,
-            resume_size=resume_size,
-            headers=headers,
-            expected_size=expected_size,
-            timeout=timeout,
-            max_retries=max_retries,
-            user_agent=user_agent
-        )
-    
-    _hf_file_download._download_to_tmp_and_move = _patched_download_to_tmp_and_move
-except Exception as _e:
-    pass  # Silently continue if patching fails
 
 from config import ApiModel, LocalModel
 from dotenv import load_dotenv
@@ -272,13 +248,26 @@ def make_chat_pipeline(model: LocalModel):
     """
     from transformers import AutoModelForCausalLM, AutoTokenizer
     import torch
+    
+    # Apply xet patch right before loading model
+    try:
+        # Disable xet at the module level before any downloads
+        import os as _os
+        _os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '0'
+        
+        import huggingface_hub
+        huggingface_hub.constants.HF_HUB_ENABLE_HF_TRANSFER = False
+    except Exception as e:
+        print(f"Warning: Could not disable xet: {e}")
 
     # Extract model_id from the enum
     model_id = model.value
     print(f"Loading local model: {model_id}")
 
     # --- Environment setup ---
-    os.environ["HF_HOME"] = "/scratch/tknolast/hf_cache"
+    os.environ["HF_HOME"] = "/scratch/tknolast/bfcl_temp/models_cache"
+    os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '0'  # Disable xet downloads
+    os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
 
     # --- Load tokenizer ---
     tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
@@ -290,39 +279,13 @@ def make_chat_pipeline(model: LocalModel):
     # Set padding side to left for decoder-only models (prevents generation issues in batch mode)
     tokenizer.padding_side = "left"
 
-    # --- Patch huggingface_hub to force standard HTTP downloads (skip xet entirely) ---
-    try:
-        import huggingface_hub.file_download as hf_file_download
-        
-        # Store original _download_to_tmp_and_move
-        original_download_to_tmp_and_move = hf_file_download._download_to_tmp_and_move
-        
-        def patched_download_to_tmp_and_move(tmp_file, destination_path, headers=None, expected_size=None, resume_size=0, url=None, max_retries=5, user_agent=None, timeout=10):
-            """Patched version that skips xet and uses http_get directly"""
-            # Call http_get directly instead of trying xet_get
-            return hf_file_download.http_get(
-                url=url,
-                temp_file=tmp_file,
-                resume_size=resume_size,
-                headers=headers,
-                expected_size=expected_size,
-                timeout=timeout,
-                max_retries=max_retries,
-                user_agent=user_agent
-            )
-        
-        hf_file_download._download_to_tmp_and_move = patched_download_to_tmp_and_move
-        print("✓ Patched huggingface_hub to skip xet downloader")
-    except Exception as e:
-        print(f"Warning: Could not patch xet downloader: {e}")
-
     # --- Load model ---
     hf_model = AutoModelForCausalLM.from_pretrained(
         model_id,
         device_map="cuda:0",  # Keep model on GPU, avoid unnecessary offloading
-        torch_dtype=torch.bfloat16,
+        dtype=torch.bfloat16,
         trust_remote_code=True,
-        # offload_folder="/scratch/tknolast/hf_offload",  # Removed for better performance
+        # offload_folder="/scratch/tknolast/bfcl_temp/hf_offload",  # Removed for better performance
     )
 
     hf_model.eval()
