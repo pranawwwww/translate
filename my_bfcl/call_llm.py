@@ -265,18 +265,28 @@ def make_chat_pipeline(model: LocalModel):
     # Set padding side to left for decoder-only models (prevents generation issues in batch mode)
     tokenizer.padding_side = "left"
 
-    # --- Patch huggingface_hub to force standard HTTP downloads (skip xet) ---
+    # --- Patch huggingface_hub to force standard HTTP downloads (skip xet entirely) ---
     try:
         import huggingface_hub.file_download as hf_file_download
         
-        def no_xet_get(*args, **kwargs):
-            """Skip xet and use standard HTTP download instead"""
-            # Remove xet-specific arguments that http_get doesn't accept
-            kwargs.pop('incomplete_path', None)
-            # Call http_get with compatible arguments
-            return hf_file_download.http_get(*args, **kwargs)
+        # Store original _download_to_tmp_and_move
+        original_download_to_tmp_and_move = hf_file_download._download_to_tmp_and_move
         
-        hf_file_download.xet_get = no_xet_get
+        def patched_download_to_tmp_and_move(tmp_file, destination_path, headers=None, expected_size=None, resume_size=0, url=None, max_retries=5, user_agent=None, timeout=10):
+            """Patched version that skips xet and uses http_get directly"""
+            # Call http_get directly instead of trying xet_get
+            return hf_file_download.http_get(
+                url=url,
+                temp_file=tmp_file,
+                resume_size=resume_size,
+                headers=headers,
+                expected_size=expected_size,
+                timeout=timeout,
+                max_retries=max_retries,
+                user_agent=user_agent
+            )
+        
+        hf_file_download._download_to_tmp_and_move = patched_download_to_tmp_and_move
         print("✓ Patched huggingface_hub to skip xet downloader")
     except Exception as e:
         print(f"Warning: Could not patch xet downloader: {e}")
