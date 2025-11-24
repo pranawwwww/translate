@@ -269,16 +269,12 @@ def make_chat_pipeline(model: LocalModel):
     try:
         import huggingface_hub.file_download as hf_file_download
         
-        def no_xet_get(url, temp_file, resume_size=0, headers=None, expected_size=None, **kwargs):
+        def no_xet_get(*args, **kwargs):
             """Skip xet and use standard HTTP download instead"""
-            # Call http_get with compatible arguments (http_get doesn't have incomplete_path)
-            return hf_file_download.http_get(
-                url=url,
-                temp_file=temp_file,
-                resume_size=resume_size,
-                headers=headers,
-                expected_size=expected_size
-            )
+            # Remove xet-specific arguments that http_get doesn't accept
+            kwargs.pop('incomplete_path', None)
+            # Call http_get with compatible arguments
+            return hf_file_download.http_get(*args, **kwargs)
         
         hf_file_download.xet_get = no_xet_get
         print("✓ Patched huggingface_hub to skip xet downloader")
