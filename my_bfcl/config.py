@@ -146,13 +146,47 @@ configs: list[Config] = [
     # Config(model=LocalModel.QWEN_2_5_14B_INSTRUCT, translate_mode=NotTranslated(), add_noise_mode=AddNoiseMode.NO_NOISE),
 ]
 
-# HINDI BENCHMARK - Local GPU models
-# Llama 3.1 8B and 70B on GPU with Hindi fully translated and partially translated
+# HINDI BENCHMARK - Full translate modes for all API and Local models
+# Test all 6 translate modes: FT, PT, PPD, PPS, PTPS, PT
 for model in [
-    LocalModel.LLAMA_3_1_70B_INSTRUCT,
+    ApiModel.DEEPSEEK_CHAT,
+    ApiModel.GPT_4O_MINI,
 ]:
     for translate_mode in [
         Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME),
+        Translated(language=Language.HINDI, option=TranslateOption.PARTIALLY_TRANSLATED),
+    ]:
+        for add_noise_mode in [
+            AddNoiseMode.NO_NOISE,
+            AddNoiseMode.SYNONYM,
+            AddNoiseMode.PARAPHRASE,
+        ]:
+            configs.append(
+                Config(
+                    model=model,
+                    translate_mode=translate_mode,
+                    add_noise_mode=add_noise_mode,
+                )
+            )
+
+# HINDI BENCHMARK - Local GPU models (Llama, Qwen, and Granite)
+for model in [
+    LocalModel.LLAMA_3_1_8B_INSTRUCT,
+    LocalModel.LLAMA_3_1_70B_INSTRUCT,
+    LocalModel.QWEN_2_5_7B_INSTRUCT,
+    LocalModel.QWEN_2_5_14B_INSTRUCT,
+    LocalModel.GRANITE_3_1_8B_INSTRUCT,
+]:
+    for translate_mode in [
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_DIFFERENT),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_POST_PROCESS_SAME),
+        Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED_PROMPT_TRANSLATE_POST_PROCESS_SAME),
         Translated(language=Language.HINDI, option=TranslateOption.PARTIALLY_TRANSLATED),
     ]:
         for add_noise_mode in [
