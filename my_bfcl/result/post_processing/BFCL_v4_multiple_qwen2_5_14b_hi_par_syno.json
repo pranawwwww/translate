@@ -22,7 +22,7 @@
 {"id": "multiple_21", "result": [{"generate_sound_wave": {"frequency": 440, "duration": 5, "wave_type": "sine"}}]}
 {"id": "multiple_22", "result": [{"sports_data.basketball.most_points_single_game": {"league": "NBA"}}]}
 {"id": "multiple_23", "result": [{"basketball.player_stats.get": {"player_name": "लेब्रन जेम्स", "stats_fields": ["points", "assists", "minutes"]}}]}
-{"id": "multiple_24", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_24", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_25", "result": [{"video_games.store_price": {"game_title": "Assassins Creed Valhalla", "platform": "PlayStation", "region": "United States"}}]}
 {"id": "multiple_26", "result": [{"game_rewards.get": {"game": "Fortnite", "platform": "Playstation", "mission": "", "trophy": ""}}]}
 {"id": "multiple_27", "result": [{"maps.shortest_path": {"start_location": "Paris, France", "end_location": "Rome, Italy", "mode": "transit"}}]}
@@ -30,7 +30,7 @@
 {"id": "multiple_29", "result": [{"functions.intersect": {"function1": "3x+2", "function2": "2x+3"}}]}
 {"id": "multiple_30", "result": [{"rectangle.area": {"length": 12, "width": 5}}]}
 {"id": "multiple_31", "result": [{"geometry_rectangle.calculate": {"width": 7, "length": 10}}]}
-{"id": "multiple_32", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_32", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_33", "result": [{"calculate_integral": {"func": "3*x**2", "a": 1, "b": 2}}]}
 {"id": "multiple_34", "result": [{"math.lcm": {"num1": 18, "num2": 12}}]}
 {"id": "multiple_35", "result": [{"calculate_gcd": {"num1": 128, "num2": 256, "algorithm": "euclidean"}}]}
@@ -65,7 +65,7 @@
 {"id": "multiple_64", "result": [{"uv_index.get_future": {"location": "Tokyo", "date": "06-01-2023"}}]}
 {"id": "multiple_65", "result": [{"geodistance.find": {"origin": "纽约市", "destination": "洛杉矶", "unit": "miles"}}]}
 {"id": "multiple_66", "result": [{"traffic_estimate": {"start_location": "लास वेगास", "end_location": "लॉस एंजेल्स", "time_period": "weekend"}}]}
-{"id": "multiple_67", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_67", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_68", "result": [{"library.search_books": {"location": "न्यू यॉर्क सार्वजनिक पुस्तकालय", "genre": "ऐतिहासिक उपन्यास"}}]}
 {"id": "multiple_69", "result": [{"five_factor_model.analyse": {"talkative": true, "nervous": true, "artistic_interests": false, "lazy": true, "forgiving": true}}]}
 {"id": "multiple_70", "result": [{"european_history.get_monarchs": {"country": "France", "century": 18}}]}
@@ -182,7 +182,7 @@
 {"id": "multiple_181", "result": [{"soccer.get_last_match": {"team_name": "Liverpool FC", "include_stats": true}}]}
 {"id": "multiple_182", "result": [{"multiplayer_game_finder": {"platform": "Windows 10", "rating": 4.5}}]}
 {"id": "multiple_183", "result": [{"recipe_info.get_calories": {"website": "foodnetwork.com", "recipe": "बीफ लसग्ना"}}]}
-{"id": "multiple_184", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_184", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_185", "result": [{"restaurant_search.find_closest": {"location": "बोस्टन", "cuisine": "सुशी", "amenities": ["Patio"]}}]}
 {"id": "multiple_186", "result": [{"find_recipe": {"dietary_restrictions": "vegetarian", "recipe_type": "dessert", "time": 30}}]}
 {"id": "multiple_187", "result": [{"whole_foods.check_price": {"location": "Los Angeles", "items": ["tomato", "salad"]}}]}

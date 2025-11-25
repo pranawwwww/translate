@@ -19,7 +19,7 @@
 {"id": "multiple_18", "result": [{"european_history.battle_details": {"battle": "स्टालिनग्राद"}}]}
 {"id": "multiple_19", "result": [{"religion_history.get_schisms": {"religion": "Christianity", "count": 3}}]}
 {"id": "multiple_20", "result": [{"sculpture_price.calculate": {"material": "bronze", "size": 3}}]}
-{"id": "multiple_21", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_21", "result": "Failed to decode JSON: Invalid JSON format - Expecting value: line 1 column 2 (char 1)"}
 {"id": "multiple_22", "result": [{"sports_data.basketball.most_points_single_game": {"league": "NBA"}}]}
 {"id": "multiple_23", "result": [{"basketball.player_stats.get": {"player_name": "LeBron James", "stats_fields": ["points", "assists", "minutes"]}}]}
 {"id": "multiple_24", "result": [{"route_planner.calculate_route": {"start": "लंदन", "destination": "एडिनबर्ग", "method": "fastest"}}]}

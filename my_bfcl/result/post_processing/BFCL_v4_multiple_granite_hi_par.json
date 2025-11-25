@@ -147,7 +147,7 @@
 {"id": "multiple_146", "result": [{"restaurant.find_nearby": {"location": "Seattle, WA", "cuisine": "Chinese", "max_distance": 10}}]}
 {"id": "multiple_147", "result": [{"map_service.get_directions": {"start": "न्यूयॉर्क", "end": "लॉस एंजेलेस", "avoid": ["highways", "tolls"]}}]}
 {"id": "multiple_148", "result": [{"get_stock_info": {"company_name": "एप्पल इंक.", "detail_level": "detailed"}}]}
-{"id": "multiple_149", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_149", "result": "Failed to decode JSON: Invalid JSON format - Expecting value: line 1 column 2 (char 1)"}
 {"id": "multiple_150", "result": [{"calculate_neuronal_activity": {"input_synaptic_rate": 200, "weight": 0.5, "decay_rate": 0.1}}]}
 {"id": "multiple_151", "result": [{"social_media_analytics.most_followed": {"topic": "mental health", "sub_topics": ["behavior", "group dynamics"], "region": "global"}}]}
 {"id": "multiple_152", "result": [{"history.get_key_events": {"country": "Germany", "start_year": 1871, "end_year": 1945, "event_type": ["War"]}}]}

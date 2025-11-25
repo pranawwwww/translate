@@ -175,11 +175,10 @@ for model in [
 
 # HINDI BENCHMARK - Local GPU models (Llama, Qwen, and Granite)
 for model in [
-    LocalModel.LLAMA_3_1_8B_INSTRUCT,
-    LocalModel.LLAMA_3_1_70B_INSTRUCT,
-    LocalModel.QWEN_2_5_7B_INSTRUCT,
-    LocalModel.QWEN_2_5_14B_INSTRUCT,
-    LocalModel.GRANITE_3_1_8B_INSTRUCT,
+    # LocalModel.LLAMA_3_1_8B_INSTRUCT,
+    # LocalModel.QWEN_2_5_7B_INSTRUCT,
+    # LocalModel.QWEN_2_5_14B_INSTRUCT,
+    # LocalModel.GRANITE_3_1_8B_INSTRUCT,
 ]:
     for translate_mode in [
         Translated(language=Language.HINDI, option=TranslateOption.FULLY_TRANSLATED),

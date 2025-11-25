@@ -30,7 +30,7 @@
 {"id": "multiple_29", "result": [{"functions.intersect": {"function1": "3x+2", "function2": "2x+3"}}]}
 {"id": "multiple_30", "result": [{"rectangle.area": {"length": 12, "width": 5}}]}
 {"id": "multiple_31", "result": [{"geometry_rectangle.calculate": {"width": 7, "length": 10}}]}
-{"id": "multiple_32", "result": "Failed to decode JSON: Invalid JSON format."}
+{"id": "multiple_32", "result": "Failed to decode AST: Invalid syntax."}
 {"id": "multiple_33", "result": [{"calculate_integral": {"func": "3*x**2", "a": 1, "b": 2}}]}
 {"id": "multiple_34", "result": [{"math.lcm": {"num1": 18, "num2": 12}}]}
 {"id": "multiple_35", "result": [{"calculate_gcd": {"num1": 128, "num2": 256, "algorithm": "euclidean"}}]}
