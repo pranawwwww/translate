@@ -365,7 +365,15 @@ for config in configs:
             id = inference_raw['id']
             # convert raw result to json format
             raw_output = model_interface.parse_output(inference_raw['result'])
-            decoded_output = raw_to_json(config.model, id, raw_output)
+            
+            # Handle both parsed (list) and unparsed (string) outputs
+            if isinstance(raw_output, list):
+                # Already parsed (API models like DeepSeek)
+                decoded_output = raw_output
+            else:
+                # Still raw string (Local models like Llama) - need to parse
+                decoded_output = raw_to_json(config.model, id, raw_output)
+            
             inference_json_entry = {
                 "id": id,
                 "result": decoded_output
