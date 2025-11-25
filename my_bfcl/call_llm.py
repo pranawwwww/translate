@@ -275,7 +275,7 @@ def make_chat_pipeline(model: LocalModel):
     print(f"Loading local model: {model_id}")
 
     # --- Environment setup ---
-    os.environ["HF_HOME"] = "/home/tknolast/.hf_cache"
+    os.environ["HF_HOME"] = "/scratch/tknolast/hf_cache"
     os.environ['HF_HUB_ENABLE_HF_TRANSFER'] = '0'  # Disable xet downloads
     os.environ['HF_HUB_DISABLE_SYMLINKS_WARNING'] = '1'
 
